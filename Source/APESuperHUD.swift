@@ -128,7 +128,7 @@ public class APESuperHUD: UIViewController {
             let vc = APESuperHUD(style: style, title: title, message: message, completion: completion)
             vc.view.tag = 11 // tag for APESuperHUD view
             presentingView.addSubview(vc.view)
-            vc.view.alpha = 0
+            vc.view.alpha = 1.0
             vc.view.translatesAutoresizingMaskIntoConstraints = false
             
             NSLayoutConstraint.activate([
