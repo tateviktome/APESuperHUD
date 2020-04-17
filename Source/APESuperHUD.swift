@@ -123,7 +123,22 @@ public class APESuperHUD: UIViewController {
         startDismissTimer()
     }
     
-    public static func show(style: HUDStyle, title: String? = nil, message: String? = nil, completion: (() -> Void)? = nil) {
+    public static func show(style: HUDStyle, title: String? = nil, message: String? = nil, completion: (() -> Void)? = nil, presentingView: UIView? = nil) {
+        if let presentingView = presentingView {
+            let vc = APESuperHUD(style: style, title: title, message: message, completion: completion)
+            vc.view.tag = 11 // tag for APESuperHUD view
+            presentingView.addSubview(vc.view)
+            vc.view.alpha = 0
+            vc.view.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([
+                vc.view.topAnchor.constraint(equalTo: presentingView.topAnchor),
+                vc.view.bottomAnchor.constraint(equalTo: presentingView.bottomAnchor),
+                vc.view.leadingAnchor.constraint(equalTo: presentingView.leadingAnchor),
+                vc.view.trailingAnchor.constraint(equalTo: presentingView.trailingAnchor)
+            ])
+            return
+        }
         if let vc = UIApplication.shared.windows.map({ $0.rootViewController }).compactMap({ $0 as? APESuperHUD }).first {
             vc.style = style
             vc.title = title
@@ -240,7 +255,18 @@ public class APESuperHUD: UIViewController {
         self.dismissTask = dismissTask
     }
     
-    public static func dismissAll(animated flag: Bool, completion: (() -> Void)? = nil) {
+    public static func dismissAll(animated flag: Bool, completion: (() -> Void)? = nil, presentingView: UIView? = nil) {
+        if let presentingView = presentingView {
+            if flag {
+                UIView.animate(withDuration: HUDAppearance.animateOutTime, animations: {
+                    presentingView.viewWithTag(11)?.alpha = 0.0
+                }, completion: { isFinished in
+                    presentingView.viewWithTag(11)?.removeFromSuperview()
+                })
+            } else {
+                presentingView.viewWithTag(11)?.removeFromSuperview()
+            }
+        }
         if let vc = UIApplication.shared.windows.map({ $0.rootViewController }).compactMap({ $0 as? APESuperHUD }).first {
             vc.dismiss(animated: flag, completion: completion)
         }

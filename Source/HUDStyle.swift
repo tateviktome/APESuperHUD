@@ -23,6 +23,7 @@
 // SOFTWARE.
 
 import Foundation
+import UIKit
 
 public enum HUDStyle {
     case icon(image: UIImage, duration: TimeInterval?)
