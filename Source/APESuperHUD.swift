@@ -125,6 +125,7 @@ public class APESuperHUD: UIViewController {
     
     public static func show(style: HUDStyle, title: String? = nil, message: String? = nil, completion: (() -> Void)? = nil, presentingView: UIView? = nil) {
         if let presentingView = presentingView {
+            if presentingView.subviews.contains(where: { $0.tag == 11 }) { return }
             let vc = APESuperHUD(style: style, title: title, message: message, completion: completion)
             vc.view.tag = 11 // tag for APESuperHUD view
             presentingView.addSubview(vc.view)
